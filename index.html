@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ग्राम पंचायत सहसन - मतदाता खोज पोर्टल</title>
   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
     body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
     .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
     .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
@@ -32,31 +32,31 @@
     <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
   </div>
 
-  <div class="ward-slider" id="wardList">
-    <button class="ward-btn active" onclick="changeWard('all', this)">सभी वार्ड (1-19)</button>
-    <button class="ward-btn" onclick="changeWard(1, this)">वार्ड 1</button>
-    <button class="ward-btn" onclick="changeWard(2, this)">वार्ड 2</button>
-    <button class="ward-btn" onclick="changeWard(3, this)">वार्ड 3</button>
-    <button class="ward-btn" onclick="changeWard(4, this)">वार्ड 4</button>
-    <button class="ward-btn" onclick="changeWard(5, this)">वार्ड 5</button>
-    <button class="ward-btn" onclick="changeWard(6, this)">वार्ड 6</button>
-    <button class="ward-btn" onclick="changeWard(7, this)">वार्ड 7</button>
-    <button class="ward-btn" onclick="changeWard(8, this)">वार्ड 8</button>
-    <button class="ward-btn" onclick="changeWard(9, this)">वार्ड 9</button>
-    <button class="ward-btn" onclick="changeWard(10, this)">वार्ड 10</button>
-    <button class="ward-btn" onclick="changeWard(11, this)">वार्ड 11</button>
-    <button class="ward-btn" onclick="changeWard(12, this)">वार्ड 12</button>
-    <button class="ward-btn" onclick="changeWard(13, this)">वार्ड 13</button>
-    <button class="ward-btn" onclick="changeWard(14, this)">वार्ड 14</button>
-    <button class="ward-btn" onclick="changeWard(15, this)">वार्ड 15</button>
-    <button class="ward-btn" onclick="changeWard(16, this)">वार्ड 16</button>
-    <button class="ward-btn" onclick="changeWard(17, this)">वार्ड 17</button>
-    <button class="ward-btn" onclick="changeWard(18, this)">वार्ड 18</button>
-    <button class="ward-btn" onclick="changeWard(19, this)">वार्ड 19</button>
+  <div class="ward-slider" id="wardSlider">
+    <button class="ward-btn active" data-ward="all">सभी वार्ड 1-19</button>
+    <button class="ward-btn" data-ward="1">वार्ड 1</button>
+    <button class="ward-btn" data-ward="2">वार्ड 2</button>
+    <button class="ward-btn" data-ward="3">वार्ड 3</button>
+    <button class="ward-btn" data-ward="4">वार्ड 4</button>
+    <button class="ward-btn" data-ward="5">वार्ड 5</button>
+    <button class="ward-btn" data-ward="6">वार्ड 6</button>
+    <button class="ward-btn" data-ward="7">वार्ड 7</button>
+    <button class="ward-btn" data-ward="8">वार्ड 8</button>
+    <button class="ward-btn" data-ward="9">वार्ड 9</button>
+    <button class="ward-btn" data-ward="10">वार्ड 10</button>
+    <button class="ward-btn" data-ward="11">वार्ड 11</button>
+    <button class="ward-btn" data-ward="12">वार्ड 12</button>
+    <button class="ward-btn" data-ward="13">वार्ड 13</button>
+    <button class="ward-btn" data-ward="14">वार्ड 14</button>
+    <button class="ward-btn" data-ward="15">वार्ड 15</button>
+    <button class="ward-btn" data-ward="16">वार्ड 16</button>
+    <button class="ward-btn" data-ward="17">वार्ड 17</button>
+    <button class="ward-btn" data-ward="18">वार्ड 18</button>
+    <button class="ward-btn" data-ward="19">वार्ड 19</button>
   </div>
 
   <div class="search-wrapper">
-    <input type="text" id="voterSearch" class="search-input" placeholder="नाम, पिता/पति का नाम, EPIC या मकान नं. खोजें..." oninput="handleSearch()">
+    <input type="text" id="voterSearch" class="search-input" placeholder="नाम, पिता/पति का नाम, EPIC या मकान नं. खोजें...">
   </div>
 
   <div class="meta-bar">
@@ -66,103 +66,113 @@
   <div id="cardContainer"></div>
 
   <script>
-    // असली मतदाताओं का डेटा यहाँ जुड़ेगा
-    // फ़ॉर्मेट: [क्रम_संख्या, वार्ड_नंबर, पहचान_पत्र_संख्या, नाम, संबंधी_का_नाम, मकान_नंबर, उम्र, लिंग]
-    const voterData = [
-      [1, 1, "RJ/09/068/144137", "लल्लु", "रहमत", "1", 86, "M"],
-[2, 1, "LTW1211838", "अफजल", "लल्लु", "1", 60, "M"],
-[3, 1, "RJ/09/068/144436", "शहीनमोहम्मद", "लल्लु", "1", 48, "M"],
-[4, 1, "LTW1211846", "फईमन", "शहीनमोहम्मद", "1", 46, "F"],
-[5, 1, "LTW1046028", "इकबाल मोहम्मद", "लल्लू", "1", 44, "M"],
-[6, 1, "TOG0147991", "पम्मी", "इकबाल मोहम्मद", "1", 42, "F"],
-[7, 1, "TOG0201806", "साबिर", "लल्लू", "1", 39, "M"],
-[8, 1, "TOG0903930", "इमरान", "लल्लू", "1", 33, "M"],
-[9, 1, "TOG0903948", "मुकीमन", "इमरान", "1", 30, "F"],
-[10, 1, "TOG1868017", "अरफीना", "साबिर", "01", 30, "F"],
-[11, 1, "TOG2138246", "मुस्कान", "साबिर", "1", 20, "F"],
-[12, 1, "TOG2140887", "साहिल", "अफजल", "1", 20, "M"],
-[13, 1, "RJ/09/068/144136", "रहमत", "जुम्मा", "2", 84, "M"],
-[14, 1, "RJ/09/068/144361", "हमीदी", "रहमत", "2", 82, "F"],
-[15, 1, "RJ/09/068/144362", "रहीश", "रहमत", "2", 52, "M"],
-[16, 1, "RJ/09/068/144363", "कश्मीरी", "रहीश", "2", 50, "F"],
-[17, 1, "LTW1211853", "शौकत", "रहमत", "2", 48, "M"],
-[18, 1, "LTW1211861", "खुर्शीदन", "शौकत", "2", 44, "F"],
-[19, 1, "TOG0587121", "अनीस", "रहीश", "2", 31, "M"],
-[20, 1, "TOG0587139", "इरशाद", "रहीश", "2", 30, "M"],
-[21, 1, "TOG0746651", "मुनफेद", "रहीश", "2", 28, "M"],
-[22, 1, "TOG1469592", "साहिबा", "अनीस", "2", 27, "F"],
-[23, 1, "TOG1917243", "अरशद", "शौकत", "2", 21, "M"],
-[24, 1, "TOG2085736", "नाजिम", "शौकत", "2", 19, "M"],
-[25, 1, "TOG2154375", "जुनैद", "रहीश", "2", 19, "M"],
-[26, 1, "RJ/09/068/144139", "इलियास", "रहमत", "3", 56, "M"],
-[27, 1, "RJ/09/068/144140", "आसीनी", "इलियास", "3", 53, "F"],
-[28, 1, "LTW1211879", "कासम", "रहमत", "3", 44, "M"],
-[29, 1, "LTW1211887", "समीना", "कासम", "3", 42, "F"],
-[30, 1, "TOG0587147", "तौफीक", "इलियास", "3", 31, "M"],
-[31, 1, "TOG0903955", "साकिर", "इलियास", "3", 29, "M"],
-[32, 1, "TOG1254713", "अजहरुद्दीन", "इलियास", "3", 28, "M"],
-[33, 1, "TOG1470400", "फरमीना", "तौफिक", "3", 27, "F"],
-[34, 1, "TOG1621531", "आबिदा", "साकिर", "3", 26, "F"],
-[35, 1, "TOG2138253", "साहिद", "इलियास", "3", 20, "M"],
-[36, 1, "RJ/09/068/144142", "सपात", "सुमेर", "4", 76, "M"],
-[37, 1, "RJ/09/068/144143", "हन्सीरी", "सपात", "4", 74, "F"],
-[38, 1, "RJ/09/068/144365", "हसन मोहम्मद", "सपात", "4", 51, "M"],
-[39, 1, "RJ/09/068/144366", "समीना", "हसन मोहम्मद", "4", 49, "F"],
-[40, 1, "LTW1046036", "हुसैन मोहम्मद", "सपात", "4", 44, "M"],
-[41, 1, "TOG0021816", "शकीला", "हुसैन मोहम्मद", "4", 41, "F"],
-[42, 1, "TOG0021824", "अकबर", "सपात", "4", 39, "M"],
-[43, 1, "TOG0148007", "आरफीना", "अकबर", "4", 36, "F"],
-[44, 1, "TOG0587154", "सद्दाम", "हसन मोहम्मद", "4", 30, "M"],
-[45, 1, "TOG1469618", "रूकसाना", "सद्दाम", "4", 28, "F"],
-[46, 1, "TOG1868025", "तसलीम", "हसन मोहम्मद", "4", 24, "M"],
-[47, 1, "TOG1917250", "साहिल खान", "हुसैन मोहम्मद", "4", 21, "M"],
-[48, 1, "TOG2138261", "मुस्कान", "हुसैन मोहम्मद", "4", 19, "F"],
-[49, 1, "RJ/09/068/144145", "सहाबुद्दीन", "सुमेर", "5", 70, "M"],
-[50, 1, "RJ/09/068/144146", "जायदा", "सहाबुद्दीन", "5", 67, "F"],
-[51, 1, "RJ/09/068/144147", "हाकम", "सहाबुद्दीन", "5", 47, "M"],
-[52, 1, "RJ/09/068/144148", "समीना", "हाकम", "5", 45, "F"],
-[53, 1, "TOG0375543", "हनीफ", "सहाबुद्दीन", "5", 39, "M"],
-[54, 1, "TOG0375550", "रसीदन", "हनीफ", "5", 35, "F"],
-[55, 1, "TOG0903963", "असद", "सहाबुद्दीन", "5", 30, "M"],
-[56, 1, "TOG1469600", "साहिबा", "असद", "5", 27, "F"],
-[57, 1, "TOG1868033", "आरिफ", "हाकम", "5", 24, "M"],
-[58, 1, "TOG2138279", "इरफान", "हाकम", "5", 20, "M"],
-[59, 1, "RJ/09/068/144150", "इस्माइल", "सुमेर", "6", 65, "M"],
-[60, 1, "RJ/09/068/144151", "जरीना", "इस्माइल", "6", 62, "F"],
-[61, 1, "LTW1211895", "सब्बीर", "इस्माइल", "6", 44, "M"],
-[62, 1, "LTW1211903", "शकीला", "सब्बीर", "6", 42, "F"],
-[63, 1, "TOG0587162", "जाकिर", "इस्माइल", "6", 32, "M"],
-[64, 1, "TOG0746669", "ताहिर", "इस्माइल", "6", 29, "M"],
-[65, 1, "TOG1470418", "मुस्कान", "जाकिर", "6", 26, "F"],
-[66, 1, "TOG1621549", "रूबीना", "ताहिर", "6", 25, "F"],
-[67, 1, "TOG2138287", "साहिल", "सब्बीर", "6", 20, "M"],
-[68, 1, "RJ/09/068/144153", "नूरमोहम्मद", "सुमेर", "7", 62, "M"],
-[69, 1, "RJ/09/068/144154", "शकीला", "नूरमोहम्मद", "7", 59, "F"],
-[70, 1, "LTW1046044", "मुस्तफा", "नूरमोहम्मद", "7", 41, "M"],
-[71, 1, "TOG0021832", "शमीम", "मुस्तफा", "7", 38, "F"],
-[72, 1, "TOG0587170", "मुबीन", "नूरमोहम्मद", "7", 33, "M"],
-[73, 1, "TOG0903971", "शकील", "नूरमोहम्मद", "7", 30, "M"],
-[74, 1, "TOG1469626", "नसीमा", "मुबीन", "7", 28, "F"],
-[75, 1, "TOG1621556", "आरिफा", "शकील", "7", 26, "F"],
-[76, 1, "TOG2138295", "सोहेल", "मुस्तफा", "7", 19, "M"],
-[77, 1, "RJ/09/068/144156", "दीनू", "रहमत", "8", 78, "M"],
-[78, 1, "RJ/09/068/144157", "बसीरन", "दीनू", "8", 75, "F"],
-[79, 1, "RJ/09/068/144368", "सलीम", "दीनू", "8", 50, "M"],
-[80, 1, "RJ/09/068/144369", "ममीना", "सलीम", "8", 47, "F"],
-[81, 1, "LTW1211911", "कय्यूम", "दीनू", "8", 44, "M"],
-[82, 1, "LTW1211929", "साहिदा", "कय्यूम", "8", 41, "F"],
-[83, 1, "TOG0587188", "सद्दाम", "सलीम", "8", 31, "M"],
-[84, 1, "TOG0746677", "इरफान", "सलीम", "8", 29, "M"],
-[85, 1, "TOG1254721", "इमरान", "कय्यूम", "8", 28, "M"],
-[86, 1, "TOG1470426", "शबाना", "सद्दाम", "8", 27, "F"],
-[87, 1, "TOG1621564", "समीना", "इरफान", "8", 25, "F"],
-[88, 1, "TOG2138303", "रिजवान", "सलीम", "8", 20, "M"],
-[89, 1, "RJ/09/068/144159", "जुम्मा", "सुमेर", "9", 74, "M"],
-[90, 1, "RJ/09/068/144160", "हमीदन", "जुम्मा", "9", 71, "F"],
-[91, 1, "RJ/09/068/144371", "मजीद", "जुम्मा", "9", 49, "M"],
-[92, 1, "RJ/09/068/144372", "रशीदन", "मजीद", "9", 46, "F"],
-[93, 1, "LTW1046051", "रशीद", "जुम्मा", "9", 43, "M"],
-[94, 1, "TOG0021840", "शकीला", "रशीद", "9", 40, "F"],
+    var voterData = [
+      
+    ];
+
+    var rawVoters = voterData.map(function(v) {
+      if (Array.isArray(v)) {
+        return {
+          serial_no: v[0],
+          ward_no: v[1],
+          epic_no: v[2] || "",
+          name: v[3] || "",
+          relative_name: v[4] || "",
+          house_no: v[5] || "",
+          age: v[6] || "",
+          gender: v[7] || ""
+        };
+      }
+      return v;
+    });
+
+    var selectedWard = "all";
+
+    var slider = document.getElementById("wardSlider");
+    var searchBox = document.getElementById("voterSearch");
+
+    slider.addEventListener("click", function(e) {
+      if (e.target.classList.contains("ward-btn")) {
+        var allButtons = slider.querySelectorAll(".ward-btn");
+        for (var i = 0; i < allButtons.length; i++) {
+          allButtons[i].classList.remove("active");
+        }
+        e.target.classList.add("active");
+        selectedWard = e.target.getAttribute("data-ward");
+        updateList();
+      }
+    });
+
+    searchBox.addEventListener("input", function() {
+      updateList();
+    });
+
+    function updateList() {
+      var query = searchBox.value.trim().toLowerCase();
+      var results = [];
+
+      for (var i = 0; i < rawVoters.length; i++) {
+        var v = rawVoters[i];
+        var wardMatch = (selectedWard === "all") || (String(v.ward_no) === String(selectedWard));
+        if (!wardMatch) continue;
+
+        if (!query) {
+          results.push(v);
+          continue;
+        }
+
+        var n = String(v.name).toLowerCase();
+        var r = String(v.relative_name).toLowerCase();
+        var e = String(v.epic_no).toLowerCase();
+        var h = String(v.house_no).toLowerCase();
+        var s = String(v.serial_no);
+
+        if (n.indexOf(query) !== -1 || r.indexOf(query) !== -1 || e.indexOf(query) !== -1 || h === query || s === query) {
+          results.push(v);
+        }
+      }
+
+      displayCards(results);
+    }
+
+    function displayCards(list) {
+      var container = document.getElementById("cardContainer");
+      var stat = document.getElementById("statText");
+
+      stat.innerText = "दिख रहे मतदाता: " + list.length;
+      container.innerHTML = "";
+
+      if (list.length === 0) {
+        container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता रिकॉर्ड नहीं मिला</p>";
+        return;
+      }
+
+      var limit = Math.min(list.length, 150);
+      var cardsHtml = "";
+
+      for (var i = 0; i < limit; i++) {
+        var item = list[i];
+        var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
+
+        cardsHtml += "<div class='voter-card'>" +
+          "<div class='card-head'>" +
+            "<span class='voter-name'>" + item.name + "</span>" +
+            "<span class='tag'>वार्ड " + item.ward_no + " • क्र. " + item.serial_no + "</span>" +
+          "</div>" +
+          "<div class='card-detail'><span class='highlight'>संबंधी का नाम:</span> " + item.relative_name + "</div>" +
+          "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gText + "</div>" +
+          "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
+        "</div>";
+      }
+
+      container.innerHTML = cardsHtml;
+    }
+
+    updateList();
+  </script>
+</body>
+</html>
+
 [95, 1, "TOG0587196", "अब्बास", "मजीद", "9", 32, "M"],
 [96, 1, "TOG0903989", "तसलीम", "मजीद", "9", 30, "M"],
 [97, 1, "TOG1254739", "मुस्तकीम", "रशीद", "9", 27, "M"],
