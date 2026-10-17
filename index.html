@@ -5,22 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ग्राम पंचायत सहसन - मतदाता खोज पोर्टल</title>
   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
-    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
-    .header h1 { margin: 0; font-size: 19px; }
+    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+    .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
     .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.92; }
     .ward-slider { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; }
     .ward-slider::-webkit-scrollbar { display: none; }
     .ward-btn { flex-shrink: 0; padding: 7px 15px; font-size: 13px; font-weight: 600; border: 1px solid #cbd5e1; border-radius: 20px; background: white; color: #334155; cursor: pointer; }
-    .ward-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
-    .search-input { width: 100%; padding: 12px 14px; font-size: 16px; border: 2px solid #3b82f6; border-radius: 10px; outline: none; background: white; margin-bottom: 10px; }
-    .meta-bar { font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 10px; padding: 0 4px; }
+    .ward-btn.active { background: #1e40af; color: white; border-color: #1e40af; box-shadow: 0 2px 4px rgba(30,64,175,0.25); }
+    .search-wrapper { position: relative; margin-bottom: 10px; }
+    .search-input { width: 100%; padding: 12px 14px; font-size: 16px; border: 2px solid #3b82f6; border-radius: 10px; outline: none; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .meta-bar { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 10px; padding: 0 4px; }
     .voter-card { background: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 9px; border-left: 5px solid #2563eb; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
     .card-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; margin-bottom: 6px; }
     .voter-name { font-size: 16px; font-weight: 700; color: #1e3a8a; }
     .tag { font-size: 11px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
-    .card-detail { font-size: 13.5px; margin: 3px 0; color: #334155; }
+    .card-detail { font-size: 13.5px; margin: 3px 0; color: #334155; line-height: 1.4; }
     .highlight { color: #0f172a; font-weight: 600; }
   </style>
 </head>
@@ -31,7 +32,7 @@
     <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
   </div>
 
-  <div class="ward-slider">
+  <div class="ward-slider" id="wardList">
     <button class="ward-btn active" onclick="changeWard('all', this)">सभी वार्ड (1-19)</button>
     <button class="ward-btn" onclick="changeWard(1, this)">वार्ड 1</button>
     <button class="ward-btn" onclick="changeWard(2, this)">वार्ड 2</button>
@@ -54,47 +55,21 @@
     <button class="ward-btn" onclick="changeWard(19, this)">वार्ड 19</button>
   </div>
 
-  <input type="text" id="voterSearch" class="search-input" placeholder="नाम, पिता/पति का नाम, EPIC या मकान नं. खोजें..." oninput="handleSearch()">
+  <div class="search-wrapper">
+    <input type="text" id="voterSearch" class="search-input" placeholder="नाम, पिता/पति का नाम, EPIC या मकान नं. खोजें..." oninput="handleSearch()">
+  </div>
 
   <div class="meta-bar">
-    <span id="statText">कुल मतदाता लोड हो रहे हैं...</span>
+    <span id="statText">दिख रहे मतदाता: 0</span>
   </div>
 
   <div id="cardContainer"></div>
 
   <script>
-    const rawVoters = [
-      { serial_no: 1, ward_no: 1, epic_no: "RJ/09/068/144137", name: "लल्लु", relative_name: "रहमत", house_no: "1", age: 86, gender: "M" },
-      { serial_no: 2, ward_no: 1, epic_no: "LTW1211838", name: "अफजल", relative_name: "लल्लु", house_no: "1", age: 60, gender: "M" },
-      { serial_no: 3, ward_no: 1, epic_no: "RJ/09/068/144436", name: "शहीनमोहम्मद", relative_name: "लल्लु", house_no: "1", age: 48, gender: "M" },
-      { serial_no: 4, ward_no: 1, epic_no: "LTW1211846", name: "फईमन", relative_name: "शहीनमोहम्मद", house_no: "1", age: 46, gender: "F" },
-      { serial_no: 5, ward_no: 1, epic_no: "LTW1046028", name: "इकबाल मोहम्मद", relative_name: "लल्लू", house_no: "1", age: 44, gender: "M" },
-      { serial_no: 6, ward_no: 1, epic_no: "TOG0147991", name: "पम्मी", relative_name: "इकबाल मोहम्मद", house_no: "1", age: 42, gender: "F" },
-      { serial_no: 7, ward_no: 1, epic_no: "TOG0201806", name: "साबिर", relative_name: "लल्लू", house_no: "1", age: 39, gender: "M" },
-      { serial_no: 8, ward_no: 1, epic_no: "TOG0903930", name: "इमरान", relative_name: "लल्लू", house_no: "1", age: 33, gender: "M" },
-      { serial_no: 9, ward_no: 1, epic_no: "TOG0903948", name: "मुकीमन", relative_name: "इमरान", house_no: "1", age: 30, gender: "F" },
-      { serial_no: 10, ward_no: 1, epic_no: "TOG1868017", name: "अरफीना", relative_name: "साबिर", house_no: "01", age: 30, gender: "F" },
-      { serial_no: 1, ward_no: 2, epic_no: "TOG2212033", name: "बुद्धासिंह", relative_name: "जोगेन्द्रसिंह", house_no: "47", age: 61, gender: "M" },
-      { serial_no: 2, ward_no: 2, epic_no: "RJ/09/068/144259", name: "कान्तोबाई", relative_name: "बुद्धासिंह", house_no: "47", age: 59, gender: "F" },
-      { serial_no: 1, ward_no: 3, epic_no: "TOG1446038", name: "समीना", relative_name: "शौकत", house_no: "128", age: 30, gender: "F" },
-      { serial_no: 1, ward_no: 4, epic_no: "TOG1840024", name: "साहिन", relative_name: "चाहनु", house_no: "169", age: 23, gender: "M" },
-      { serial_no: 1, ward_no: 5, epic_no: "LTW0932756", name: "बडदन", relative_name: "दीनू", house_no: "503", age: 78, gender: "F" },
-      { serial_no: 1, ward_no: 6, epic_no: "TOG1919737", name: "सुखविंदर कौर", relative_name: "स्वर्ण सिंह", house_no: "84", age: 22, gender: "F" },
-      { serial_no: 1, ward_no: 7, epic_no: "TOG1446079", name: "गुलशन", relative_name: "रघुवीर", house_no: "232", age: 32, gender: "M" },
-      { serial_no: 1, ward_no: 8, epic_no: "RJ/09/068/147202", name: "तैयब", relative_name: "समीखान", house_no: "257", age: 74, gender: "M" },
-      { serial_no: 1, ward_no: 9, epic_no: "LTW0932251", name: "सज्जनसिंह", relative_name: "शेरासिंह", house_no: "290", age: 59, gender: "M" },
-      { serial_no: 1, ward_no: 10, epic_no: "TOG2248748", name: "तनू खंडेलवाल", relative_name: "नितिन कुमार", house_no: "582", age: 23, gender: "F" },
-      { serial_no: 1, ward_no: 11, epic_no: "TOG1259076", name: "कृष्ण कौर", relative_name: "सुखदेव सिंह", house_no: "663", age: 32, gender: "F" },
-      { serial_no: 1, ward_no: 12, epic_no: "TOG1451194", name: "अंजुमन", relative_name: "मुश्तफा", house_no: "734", age: 29, gender: "F" },
-      { serial_no: 1, ward_no: 13, epic_no: "TOG0217877", name: "मुनैद", relative_name: "इलियास", house_no: "762", age: 35, gender: "M" },
-      { serial_no: 1, ward_no: 14, epic_no: "TOG1451210", name: "बबिता", relative_name: "लोकेश", house_no: "808", age: 28, gender: "F" },
-      { serial_no: 1, ward_no: 15, epic_no: "TOG1837905", name: "तारिफा", relative_name: "जुनैद खान", house_no: "866", age: 25, gender: "F" },
-      { serial_no: 1, ward_no: 16, epic_no: "TOG1470426", name: "सिमरन कौर", relative_name: "जोगेन्द्र सिंह", house_no: "380", age: 30, gender: "F" },
-      { serial_no: 1, ward_no: 17, epic_no: "TOG1469717", name: "शमीम", relative_name: "जमील खां", house_no: "636", age: 25, gender: "M" },
-      { serial_no: 1, ward_no: 18, epic_no: "TOG1505593", name: "परमजीत सिंह", relative_name: "रतन सिंह", house_no: "510", age: 27, gender: "M" },
-      { serial_no: 1, ward_no: 19, epic_no: "TOG1969161", name: "राशिद", relative_name: "उस्मान", house_no: "119", age: 22, gender: "M" }
-    ]
-[1, 1, "RJ/09/068/144137", "लल्लु", "रहमत", "1", 86, "M"],
+    // असली मतदाताओं का डेटा यहाँ जुड़ेगा
+    // फ़ॉर्मेट: [क्रम_संख्या, वार्ड_नंबर, पहचान_पत्र_संख्या, नाम, संबंधी_का_नाम, मकान_नंबर, उम्र, लिंग]
+    const voterData = [
+      [1, 1, "RJ/09/068/144137", "लल्लु", "रहमत", "1", 86, "M"],
 [2, 1, "LTW1211838", "अफजल", "लल्लु", "1", 60, "M"],
 [3, 1, "RJ/09/068/144436", "शहीनमोहम्मद", "लल्लु", "1", 48, "M"],
 [4, 1, "LTW1211846", "फईमन", "शहीनमोहम्मद", "1", 46, "F"],
@@ -118,7 +93,7 @@
 [22, 1, "TOG1469592", "साहिबा", "अनीस", "2", 27, "F"],
 [23, 1, "TOG1917243", "अरशद", "शौकत", "2", 21, "M"],
 [24, 1, "TOG2085736", "नाजिम", "शौकत", "2", 19, "M"],
-[25, 1, "TOG2154375", "जुनैद", "रहीश", "2", 19, "M"]
+[25, 1, "TOG2154375", "जुनैद", "रहीश", "2", 19, "M"],
 [26, 1, "RJ/09/068/144139", "इलियास", "रहमत", "3", 56, "M"],
 [27, 1, "RJ/09/068/144140", "आसीनी", "इलियास", "3", 53, "F"],
 [28, 1, "LTW1211879", "कासम", "रहमत", "3", 44, "M"],
@@ -143,8 +118,29 @@
 [47, 1, "TOG1917250", "साहिल खान", "हुसैन मोहम्मद", "4", 21, "M"],
 [48, 1, "TOG2138261", "मुस्कान", "हुसैन मोहम्मद", "4", 19, "F"],
 [49, 1, "RJ/09/068/144145", "सहाबुद्दीन", "सुमेर", "5", 70, "M"],
-[50, 1, "RJ/09/068/144146", "जायदा", "सहाबुद्दीन", "5", 67, "F"]
-    
+[50, 1, "RJ/09/068/144146", "जायदा", "सहाबुद्दीन", "5", 67, "F"],
+ 
+      
+    ];
+
+    const rawVoters = voterData.map(v => {
+      if (Array.isArray(v)) {
+        return {
+          serial_no: v[0],
+          ward_no: v[1],
+          epic_no: v[2],
+          name: v[3],
+          relative_name: v[4],
+          house_no: v[5],
+          age: v[6],
+          gender: v[7]
+        };
+      }
+      return v;
+    });
+
+    let activeWard = 'all';
+
     function changeWard(ward, el) {
       activeWard = ward;
       document.querySelectorAll('.ward-btn').forEach(b => b.classList.remove('active'));
@@ -154,6 +150,7 @@
 
     function handleSearch() {
       const q = document.getElementById('voterSearch').value.trim().toLowerCase();
+      
       const filtered = rawVoters.filter(item => {
         const matchWard = activeWard === 'all' || String(item.ward_no) === String(activeWard);
         if (!matchWard) return false;
@@ -175,14 +172,14 @@
       const container = document.getElementById('cardContainer');
       const stat = document.getElementById('statText');
       container.innerHTML = '';
-      stat.innerText = "दिख रहे मतदाता: " + list.length;
+      stat.innerText = 'दिख रहे मतदाता: ' + list.length;
 
       if (list.length === 0) {
         container.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:40px 10px;">कोई मतदाता रिकॉर्ड नहीं मिला</p>';
         return;
       }
 
-      list.forEach(v => {
+      list.slice(0, 100).forEach(v => {
         const div = document.createElement('div');
         div.className = 'voter-card';
         div.innerHTML = `
@@ -191,7 +188,7 @@
             <span class="tag">वार्ड ${v.ward_no} • क्र. ${v.serial_no}</span>
           </div>
           <div class="card-detail"><span class="highlight">संबंधी का नाम:</span> ${v.relative_name}</div>
-          <div class="card-detail"><span class="highlight">मकान नं:</span> ${v.house_no} | <span class="highlight">उम्र:</span> ${v.age} | <span class="highlight">लिंग:</span> ${v.gender === 'M' ? 'पुरुष' : 'स्त्री'}</div>
+          <div class="card-detail"><span class="highlight">मकान नं:</span> ${v.house_no} | <span class="highlight">उम्र:</span> ${v.age} वर्ष | <span class="highlight">लिंग:</span> ${v.gender === 'M' ? 'पुरुष' : 'स्त्री'}</div>
           <div class="card-detail"><span class="highlight">EPIC पहचान पत्र:</span> ${v.epic_no || 'उपलब्ध नहीं'}</div>
         `;
         container.appendChild(div);
