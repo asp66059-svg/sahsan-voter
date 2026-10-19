@@ -112,32 +112,40 @@
         });
 
         function updateList() {
-            var query = searchBox.value.trim().toLowerCase();
-            var results = [];
+    var query = searchBox.value.trim().toLowerCase();
+    var results = [];
 
-            for (var i = 0; i < rawVoters.length; i++) {
-                var v = rawVoters[i];
-                var wardMatch = (selectedWard === "all") || (String(v.ward_no) === String(selectedWard));
-                if (!wardMatch) continue;
+    for (var i = 0; i < rawVoters.length; i++) {
+        var v = rawVoters[i];
+        var rawStr = String(v.raw_item).toUpperCase();
+        var isDeleted = rawStr.indexOf("DELETED") !== -1 || rawStr.indexOf("विलोपित") !== -1;
 
-                if (!query) {
-                    results.push(v);
-                    continue;
-                }
-
-                var n = String(v.name).toLowerCase();
-                var r = String(v.relative_name).toLowerCase();
-                var e = String(v.epic_no).toLowerCase();
-                var h = String(v.house_no).toLowerCase();
-                var s = String(v.serial_no).toLowerCase();
-
-                if (n.indexOf(query) !== -1 || r.indexOf(query) !== -1 || e.indexOf(query) !== -1 || h === query || s === query) {
-                    results.push(v);
-                }
-            }
-
-            displayCards(results);
+        if (selectedWard === "deleted") {
+            if (!isDeleted) continue;
+        } else {
+            var wardMatch = (selectedWard === "all") || (String(v.ward_no) === String(selectedWard));
+            if (!wardMatch) continue;
         }
+
+        if (!query) {
+            results.push(v);
+            continue;
+        }
+
+        var n = String(v.name).toLowerCase();
+        var r = String(v.relative_name).toLowerCase();
+        var e = String(v.epic_no).toLowerCase();
+        var h = String(v.house_no).toLowerCase();
+        var s = String(v.serial_no).toLowerCase();
+
+        if (n.indexOf(query) !== -1 || r.indexOf(query) !== -1 || e.indexOf(query) !== -1 || h === query || s === query) {
+            results.push(v);
+        }
+    }
+
+    displayCards(results);
+        }
+        
 
         function displayCards(list) {
             var container = document.getElementById("cardContainer");
