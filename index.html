@@ -4,27 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ग्राम पंचायत सहसन - मतदाता खोज पोर्टल 2026</title>
-    <style>
-        { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-        body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
-        .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
-        .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
-        .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.92; }
-        .ward-slider { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; scrollbar-width: none; }
-        .ward-slider::-webkit-scrollbar { display: none; }
-        .ward-btn { flex-shrink: 0; padding: 7px 15px; font-size: 13px; font-weight: 600; border: 1px solid #cbd5e1; background: white; border-radius: 8px; cursor: pointer; color: #475569; }
-        .ward-btn.active { background: #1e40af; color: white; border-color: #1e40af; box-shadow: 0 2px 4px rgba(30,64,175,0.3); }
-        .search-wrapper { position: relative; margin-bottom: 10px; }
-        .search-input { width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 10px; background: #fff; outline: none; }
-        .search-input:focus { border-color: #1e40af; }
-        .meta-bar { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 10px; padding: 0 4px; }
-        .voter-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
-        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
-        .voter-name { font-size: 16px; font-weight: 700; color: #1e293b; }
-        .tag { font-size: 11px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
-        .card-detail { font-size: 13.5px; margin: 3px 0; color: #334155; line-height: 1.4; }
-        .highlight { color: #0f172a; font-weight: 600; }
-    </style>
+   <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
+    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
+    .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
+    .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.92; }
+    .ward-slider { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; scrollbar-width: none; }
+    .ward-slider::-webkit-scrollbar { display: none; }
+    .ward-btn { flex-shrink: 0; padding: 7px 15px; font-size: 13px; font-weight: 600; border: 1px solid #cbd5e1; background: white; border-radius: 8px; cursor: pointer; color: #475569; }
+    .ward-btn.active { background: #1e40af; color: white; border-color: #1e40af; box-shadow: 0 2px 4px rgba(30,64,175,0.3); }
+    .search-wrapper { position: relative; margin-bottom: 10px; }
+    .search-input { width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 10px; background: #fff; outline: none; }
+    .search-input:focus { border-color: #1e40af; }
+    .meta-bar { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 10px; padding: 0 4px; }
+    .voter-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
+    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
+    .voter-name { font-size: 16px; font-weight: 700; color: #1e293b; }
+    .tag { font-size: 11px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+    .card-detail { font-size: 13.5px; margin: 3px 0; color: #334155; line-height: 1.4; }
+    .highlight { color: #0f172a; font-weight: 600; }
+   </style>
+    
 </head>
 <body>
 
