@@ -72,22 +72,24 @@
 
   <script>
     var rawVoters = [];
-    if (typeof voterData !== 'undefined' && Array.isArray(voterData)) {
-      rawVoters = voterData.map(function(v) {
+if (typeof voterData !== 'undefined' && Array.isArray(voterData)) {
+    rawVoters = voterData.map(function(v) {
         if (Array.isArray(v)) {
-          return {
-            serial_no: v[0],
-            ward_no: v[1],
-            epic_no: v[2] || "",
-            name: v[3] || "",
-            relative_name: v[4] || "",
-            house_no: v[5] || "",
-            age: v[6] || "",
-            gender: v[7] || ""
-          };
+            return {
+                serial_no: v[0],
+                ward_no: v[1],
+                epic_no: v[2] || "",
+                name: v[3] || "",
+                relative_name: v[4] || "",
+                house_no: v[5] || "",
+                age: v[6] || "",
+                gender: v[7] || "",
+                status: v[8] || "" // यहाँ डिलीटेड स्टेटस सेव हो रहा है
+            };
         }
-        return v;
-      });
+    }).filter(Boolean);
+    }
+    
     }
 
     var selectedWard = "all";
