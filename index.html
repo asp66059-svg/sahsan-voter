@@ -139,37 +139,40 @@
     }
 
     function displayCards(list) {
-      var container = document.getElementById("cardContainer");
-      var stat = document.getElementById("statText");
+    var container = document.getElementById("cardContainer");
+    var stat = document.getElementById("statText");
+    
+    stat.innerText = "दिख रहे मतदाता: " + list.length;
+    container.innerHTML = "";
 
-      stat.innerText = "दिख रहे मतदाता: " + list.length;
-      container.innerHTML = "";
-
-      if (list.length === 0) {
-        container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता रिकॉर्ड नहीं मिला</p>";
+    if (list.length === 0) {
+        container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता नहीं मिला</p>";
         return;
-      }
+    }
 
-      var limit = Math.min(list.length, 1500);
-      var cardsHtml = "";
+    var cardsHtml = "";
 
-      for (var i = 0; i < limit; i++) {
+    for (var i = 0; i < list.length; i++) {
         var item = list[i];
         var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
+        
+        var isDeleted = item.status === "DELETED" || item.is_deleted === true; 
+        var deleteBadge = isDeleted ? "<span style='background:#fee2e2; color:#dc2626; padding:2px 6px; border-radius:6px; font-weight:bold; margin-left:8px; font-size:12px;'>DELETED</span>" : "";
 
-        cardsHtml += "<div class='voter-card'>" +
-          "<div class='card-head'>" +
-            "<span class='voter-name'>" + item.name + "</span>" +
-            "<span class='tag'>वार्ड " + item.ward_no + " • क्र. " + item.serial_no + "</span>" +
-          "</div>" +
-          "<div class='card-detail'><span class='highlight'>संबंधी का नाम:</span> " + item.relative_name + "</div>" +
-          "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gText + "</div>" +
-          "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
+        cardsHtml += "<div class='voter-card' " + (isDeleted ? "style='border-left: 4px solid #dc2626; background: #fff5f5;'" : "") + ">" +
+            "<div class='card-head'>" +
+                "<span class='voter-name'>" + item.name + deleteBadge + "</span>" +
+                "<span class='tag'>वार्ड " + item.ward_no + " • क्र. " + item.serial_no + "</span>" +
+            "</div>" +
+            "<div class='card-detail'><span class='highlight'>संबंधी का नाम:</span> " + item.relative_name + "</div>" +
+            "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gText + "</div>" +
+            "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
         "</div>";
-      }
-
-      container.innerHTML = cardsHtml;
     }
+    
+    container.innerHTML = cardsHtml;
+    }
+    
 
     updateList();
   </script>
