@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+        <script>
+        var savedPassword = "052026"; 
+        var userEntered = prompt("कृपया पोर्टल देखने के लिए पासवर्ड दर्ज करें:");
+        if (userEntered !== savedPassword) {
+            alert("गलत पासवर्ड! एक्सेस अस्वीकार कर दिया गया है।");
+            document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px; color:red;'>Access Denied. गलत पासवर्ड।</h2>";
+        }
+        </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ग्राम पंचायत सहसन - मतदाता खोज पोर्टल 2026</title>
