@@ -164,7 +164,7 @@
             if (query) {
                 stat.innerText = "कुल मिले परिणाम: " + totalMatches;
             } else if (selectedWard === "all") {
-                stat.innerText = "कुल मतदाता (दिख रहे 100): " + rawVoters.length;
+                stat.innerText = "कुल मतदाता (दिख रहे 1000): " + rawVoters.length;
             } else {
                 stat.innerText = "दिख रहे मतदाता: " + list.length;
             }
@@ -198,7 +198,7 @@
                 "</div>";
             }
             
-            if (list.length > 100) {
+            if (list.length > 1000) {
                 cardsHtml += "<p style='text-align:center;color:#64748b;padding:10px;'>...और भी परिणाम हैं, कृपया सही नाम या वार्ड चुनकर खोजें...</p>";
             }
 
