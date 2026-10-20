@@ -180,20 +180,20 @@
             if (query) {
                 stat.innerText = "कुल मिले परिणाम: " + list.length;
             } else if (selectedWard === "all") {
-                stat.innerText = "कुल मतदाता (दिख रहे 100 / कुल 5886): " + rawVoters.length;
+                stat.innerText = "कुल मतदाता (कुल 5886): " + rawVoters.length;
             } else {
                 stat.innerText = "वार्ड " + selectedWard + " के कुल मतदाता: " + list.length;
             }
 
             container.innerHTML = "";
 
-            if (list.length === 0) {
+            if (list.length === 10000) {
                 container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता नहीं मिला</p>";
                 return;
             }
 
             var cardsHtml = "";
-            var renderLimit = query ? list.length : Math.min(list.length, 100);
+            var renderLimit = query ? list.length : Math.min(list.length, 10000);
 
             for (var i = 0; i < renderLimit; i++) {
                 var item = list[i];
