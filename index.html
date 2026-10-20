@@ -62,7 +62,7 @@
     </div>
 
     <div class="meta-bar">
-        <span id="statText">दिख रहे मतदाता: 0</span>
+        <span id="statText">कुल मतदाता: 5886</span>
     </div>
 
     <div id="cardContainer"></div>
@@ -120,7 +120,6 @@
         function updateList() {
             var query = searchBox.value.trim().toLowerCase();
             var results = [];
-            var matchCount = 0;
 
             for (var i = 0; i < rawVoters.length; i++) {
                 var v = rawVoters[i];
@@ -147,26 +146,21 @@
                 }
 
                 results.push(v);
-                matchCount++;
-
-                if (!query && matchCount >= 100 && selectedWard === "all") {
-                    break; 
-                }
             }
 
-            displayCards(results, matchCount, query);
+            displayCards(results, query);
         }
 
-        function displayCards(list, totalMatches, query) {
+        function displayCards(list, query) {
             var container = document.getElementById("cardContainer");
             var stat = document.getElementById("statText");
             
             if (query) {
-                stat.innerText = "कुल मिले परिणाम: " + totalMatches;
+                stat.innerText = "कुल मिले परिणाम: " + list.length;
             } else if (selectedWard === "all") {
-                stat.innerText = "कुल मतदाता (दिख रहे 1000): " + rawVoters.length;
+                stat.innerText = "कुल मतदाता: " + rawVoters.length;
             } else {
-                stat.innerText = "दिख रहे मतदाता: " + list.length;
+                stat.innerText = "वार्ड " + selectedWard + " के कुल मतदाता: " + list.length;
             }
 
             container.innerHTML = "";
@@ -177,9 +171,8 @@
             }
 
             var cardsHtml = "";
-            var renderLimit = Math.min(list.length, 1000);
 
-            for (var i = 0; i < renderLimit; i++) {
+            for (var i = 0; i < list.length; i++) {
                 var item = list[i];
                 var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
                 
@@ -198,10 +191,6 @@
                 "</div>";
             }
             
-            if (list.length > 10000) {
-                cardsHtml += "<p style='text-align:center;color:#64748b;padding:10px;'>...और भी परिणाम हैं, कृपया सही नाम या वार्ड चुनकर खोजें...</p>";
-            }
-
             container.innerHTML = cardsHtml;
         }
 
