@@ -28,17 +28,6 @@
 </head>
 <body>
 
-    <script>
-        // Password Protection Check
-        var correctPassword = "052026";
-        var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
-        
-        if (userEntered !== correctPassword) {
-            document.body.innerHTML = "<h2 style='text-align:center;margin-top:20vh;color:#dc2626;'>Galat Password! Website dekhne ki anumati nahi hai.</h2>";
-            throw new Error("Unauthorized access");
-        }
-    </script>
-
     <div class="header">
         <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
         <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
@@ -80,6 +69,20 @@
 
     <script src="data.js"></script>
     <script>
+        // Password Protection Check
+        var correctPassword = "052026";
+        var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
+        
+        if (userEntered !== correctPassword) {
+            document.body.innerHTML = "<div style='text-align:center;margin-top:25vh;'><h2 style='color:#dc2626;'>Galat Password!</h2><p>Website dekhne ki anumati nahi hai. Kripya page refresh karke sahi password dalein.</p></div>";
+            // Sabhi elements ko hide kar diya taki galat password par data na dikhe
+            document.getElementById("wardSlider").style.display = "none";
+            document.querySelector(".search-wrapper").style.display = "none";
+            document.querySelector(".meta-bar").style.display = "none";
+            document.getElementById("cardContainer").style.display = "none";
+            throw new Error("Unauthorized access");
+        }
+
         var actualData = [];
         if (typeof voterData !== 'undefined') { actualData = voterData; }
         else if (typeof voters !== 'undefined') { actualData = voters; }
@@ -121,6 +124,7 @@
             }
         });
 
+        // Debounce lagane se typing karte samay lag bilkul khatam ho jayega
         searchBox.addEventListener("input", function() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(function() {
@@ -131,6 +135,7 @@
         function updateList() {
             var query = searchBox.value.trim().toLowerCase();
             var results = [];
+            var matchCount = 0;
 
             for (var i = 0; i < rawVoters.length; i++) {
                 var v = rawVoters[i];
@@ -157,19 +162,25 @@
                 }
 
                 results.push(v);
+                matchCount++;
+
+                // Performance ke liye bina search ke all ward me pehle 100 render honge, search par sabhi match dikhenge
+                if (!query && matchCount >= 100 && selectedWard === "all") {
+                    break;
+                }
             }
 
-            displayCards(results, query);
+            displayCards(results, matchCount, query);
         }
 
-        function displayCards(list, query) {
+        function displayCards(list, totalMatches, query) {
             var container = document.getElementById("cardContainer");
             var stat = document.getElementById("statText");
             
             if (query) {
                 stat.innerText = "कुल मिले परिणाम: " + list.length;
             } else if (selectedWard === "all") {
-                stat.innerText = "कुल मतदाता: " + rawVoters.length;
+                stat.innerText = "कुल मतदाता (दिख रहे 100 / कुल 5886): " + rawVoters.length;
             } else {
                 stat.innerText = "वार्ड " + selectedWard + " के कुल मतदाता: " + list.length;
             }
@@ -182,8 +193,9 @@
             }
 
             var cardsHtml = "";
+            var renderLimit = query ? list.length : Math.min(list.length, 100);
 
-            for (var i = 0; i < list.length; i++) {
+            for (var i = 0; i < renderLimit; i++) {
                 var item = list[i];
                 var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
                 
@@ -202,6 +214,10 @@
                 "</div>";
             }
             
+            if (!query && selectedWard === "all" && list.length > 100) {
+                cardsHtml += "<p style='text-align:center;color:#64748b;padding:10px;'>...और भी मतदाता देखने के लिए नाम, मकान नंबर या वार्ड खोजें...</p>";
+            }
+
             container.innerHTML = cardsHtml;
         }
 
