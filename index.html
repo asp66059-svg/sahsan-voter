@@ -221,4 +221,16 @@ document.getElementById("cardContainer").innerHTML = "<p style='text-align:cente
         updateList();
     </script>
 </body>
+<script>
+    function checkPassword() {
+        var pass = document.getElementById("lockInput").value;
+        if (pass === "052026") { // यहाँ "123" की जगह अपना पासवर्ड लिख लें
+            location.reload(); 
+        } else {
+            document.getElementById("lockError").style.display = "block";
+            document.getElementById("lockInput").value = "";
+        }
+    }
+</script>
+            
 </html>
