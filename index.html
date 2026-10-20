@@ -1,145 +1,111 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-            <style>
-    #lockScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1e293b; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-family: sans-serif; }
-    #lockBox { background: white; padding: 25px; border-radius: 12px; text-align: center; color: #1f2937; width: 90%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-    #lockInput { width: 100%; padding: 10px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 8px; margin: 15px 0; outline: none; text-align: center; }
-    #lockBtn { width: 100%; padding: 10px; background: #1e40af; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    #lockError { color: red; font-size: 13px; margin-top: 8px; display: none
-                        
-            </style>
-            
-        
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ग्राम पंचायत सहसन - मतदाता खोज पोर्टल 2026</title>
-   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
-    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
-    .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
-    .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.92; }
-    .ward-slider { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; scrollbar-width: none; }
-    .ward-slider::-webkit-scrollbar { display: none; }
-    .ward-btn { flex-shrink: 0; padding: 7px 15px; font-size: 13px; font-weight: 600; border: 1px solid #cbd5e1; background: white; border-radius: 8px; cursor: pointer; color: #475569; }
-    .ward-btn.active { background: #1e40af; color: white; border-color: #1e40af; box-shadow: 0 2px 4px rgba(30,64,175,0.3); }
-    .search-wrapper { position: relative; margin-bottom: 10px; }
-    .search-input { width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 10px; background: #fff; outline: none; }
-    .search-input:focus { border-color: #1e40af; }
-    .meta-bar { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 10px; padding: 0 4px; }
-    .voter-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
-    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
-    .voter-name { font-size: 16px; font-weight: 700; color: #1e293b; }
-    .tag { font-size: 11px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
-    .card-detail { font-size: 13.5px; margin: 3px 0; color: #334155; line-height: 1.4; }
-    .highlight { color: #0f172a; font-weight: 600; }
-    .voter-card { content-visibility: auto; }
-       
-   </style>
-    
+    <title>ग्राम पंचायत सहसन - मतदाता खोज</title>
+    <style>
+        * { box-sizing: border-box; font-family: sans-serif; }
+        body { margin: 0; padding: 10px; background: #f1f5f9; }
+        .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
+        .ward-slider { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 10px; }
+        .ward-slider::-webkit-scrollbar { display: none; }
+        .ward-btn { flex-shrink: 0; padding: 8px 14px; background: white; border: 1px solid #cbd5e1; border-radius: 20px; font-size: 13px; cursor: pointer; color: #334155; }
+        .ward-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
+        .search-wrapper { position: relative; margin-bottom: 10px; }
+        .search-input { width: 100%; padding: 10px 15px; font-size: 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; }
+        .meta-bar { display: flex; justify-content: space-between; font-size: 13px; color: #64748b; margin-bottom: 10px; padding: 0 4px; }
+        .voter-card { background: white; padding: 12px; border-radius: 8px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); content-visibility: auto; }
+        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .voter-name { font-size: 16px; font-weight: bold; color: #1e293b; }
+        .tag { font-size: 11px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; color: #475569; }
+        .tag.deleted { background: #fee2e2; color: #991b1b; }
+        .card-detail { font-size: 13.5px; color: #475569; margin-bottom: 3px; }
+        .highlight { color: #0f172a; font-weight: 500; }
+
+        /* Lock Screen Styling */
+        #lockScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1e293b; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
+        #lockBox { background: white; padding: 25px; border-radius: 12px; text-align: center; color: #1f2937; width: 90%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        #lockInput { width: 100%; padding: 10px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 8px; margin: 15px 0; outline: none; text-align: center; }
+        #lockBtn { width: 100%; padding: 10px; background: #1e40af; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        #lockError { color: red; font-size: 13px; margin-top: 8px; display: none; }
+    </style>
 </head>
 <body>
-<div id="lockScreen">
-    <div id="lockBox">
-        <h3 style="margin-top:0; color:#1e40af;">ग्राम पंचायत सहसन</h3>
-        <p style="font-size:14px; color:#64748b;">पोर्टल देखने के लिए पासवर्ड दर्ज करें</p>
-        <input type="password" id="lockInput" placeholder="पासवर्ड लिखें...">
-        <button id="lockBtn" onclick="checkPassword()">सत्यापित करें</button>
-        <div id="lockError">गलत पासवर्ड! पुनः प्रयास करें।</div>
-    </div>
-</div>
 
-<script>
-    function checkPassword() {
-        var pass = document.getElementById("lockInput").value;
-        if (pass === "052026") { // यहाँ "123" की जगह अपना पासवर्ड बदल सकते हैं
-            document.getElementById("lockScreen").style.display = "none";
-        } else {
-            document.getElementById("lockError").style.display = "block";
-            document.getElementById("lockInput").value = "";
-        }
-    }
-</script>
-            
+    <!-- Password Lock Screen Overlay -->
+    <div id="lockScreen">
+        <div id="lockBox">
+            <h3 style="margin-top:0; color:#1e40af;">ग्राम पंचायत सहसन</h3>
+            <p style="font-size:14px; color:#64748b;">पोर्टल देखने के लिए पासवर्ड दर्ज करें</p>
+            <input type="password" id="lockInput" placeholder="पासवर्ड लिखें...">
+            <button id="lockBtn" onclick="checkPassword()">सत्यापित करें</button>
+            <div id="lockError">गलत पासवर्ड! पुनः प्रयास करें।</div>
+        </div>
+    </div>
+
     <div class="header">
-        <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
+        <h1>ग्राम पंचायत सहसन</h1>
         <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
     </div>
 
     <div class="ward-slider" id="wardSlider">
-        <button class="ward-btn active" data-ward="all">सभी वार्ड 1-19</button>
-        <button class="ward-btn" data-ward="1">वार्ड 1</button>
-        <button class="ward-btn" data-ward="2">वार्ड 2</button>
-        <button class="ward-btn" data-ward="3">वार्ड 3</button>
-        <button class="ward-btn" data-ward="4">वार्ड 4</button>
-        <button class="ward-btn" data-ward="5">वार्ड 5</button>
-        <button class="ward-btn" data-ward="6">वार्ड 6</button>
-        <button class="ward-btn" data-ward="7">वार्ड 7</button>
-        <button class="ward-btn" data-ward="8">वार्ड 8</button>
-        <button class="ward-btn" data-ward="9">वार्ड 9</button>
-        <button class="ward-btn" data-ward="10">वार्ड 10</button>
-        <button class="ward-btn" data-ward="11">वार्ड 11</button>
-        <button class="ward-btn" data-ward="12">वार्ड 12</button>
-        <button class="ward-btn" data-ward="13">वार्ड 13</button>
-        <button class="ward-btn" data-ward="14">वार्ड 14</button>
-        <button class="ward-btn" data-ward="15">वार्ड 15</button>
-        <button class="ward-btn" data-ward="16">वार्ड 16</button>
-        <button class="ward-btn" data-ward="17">वार्ड 17</button>
-        <button class="ward-btn" data-ward="18">वार्ड 18</button>
-        <button class="ward-btn" data-ward="19">वार्ड 19</button>
-        <button class="ward-btn" data-ward="deleted">Deleted Voters</button>
-        
+        <button class="ward-btn active" data-ward="all">सभी वार्ड</button>
+        <button class="ward-btn" data-ward="deleted" style="background: #fee2e2; color: #991b1b; border-color: #fca5a5;">डिलिटेड वोटर्स</button>
+        <!-- Wards 1 to 15 will be injected via JS if needed or can be kept -->
     </div>
 
     <div class="search-wrapper">
-        <input type="text" id="voterSearch" class="search-input" placeholder="नाम, पिता/पति का नाम, EPIC या मकान नं. खोजें...">
+        <input type="text" id="searchBox" class="search-input" placeholder="नाम, EPIC नंबर, वार्ड या मकान नंबर से खोजें...">
     </div>
 
     <div class="meta-bar">
-        <span id="statText">दिख रहे मतदाता: 0</span>
+        <span id="statText">कुल मतदाता: 0</span>
+        <span>सहसन पोर्टल</span>
     </div>
 
     <div id="cardContainer"></div>
 
-    <!-- data.js file se voters ka data connect hoga -->
+    <!-- Data file -->
     <script src="data.js"></script>
-            
+
     <script>
-        var rawVoters = [];
-        if (typeof voterData !== 'undefined' && Array.isArray(voterData)) {
-            rawVoters = voterData.map(function(v) {
-                if (Array.isArray(v)) {
-                    return {
-                        serial_no: v[0],
-                        ward_no: v[1],
-                        epic_no: v[2] || "",
-                        name: v[3] || "",
-                        relative_name: v[4] || "",
-                        house_no: v[5] || "",
-                        age: v[6] || "",
-                        gender: v[7] || "",
-                        raw_item: v
-                    };
-                }
-            }).filter(Boolean);
+        function checkPassword() {
+            var pass = document.getElementById("lockInput").value;
+            if (pass === "123") { // Yahan "123" ki jagah apna password rakh sakte hain
+                document.getElementById("lockScreen").style.display = "none";
+            } else {
+                document.getElementById("lockError").style.display = "block";
+                document.getElementById("lockInput").value = "";
+            }
         }
 
         var selectedWard = "all";
-        var slider = document.getElementById("wardSlider");
-        var searchBox = document.getElementById("voterSearch");
+        var searchBox = document.getElementById("searchBox");
+        var container = document.getElementById("cardContainer");
+        var statText = document.getElementById("statText");
 
-        slider.addEventListener("click", function(e) {
-            if (e.target.classList.contains("ward-btn")) {
-                var allButtons = slider.querySelectorAll(".ward-btn");
-                for (var i = 0; i < allButtons.length; i++) {
-                    allButtons[i].classList.remove("active");
-                }
-                e.target.classList.add("active");
-                selectedWard = e.target.getAttribute("data-ward");
+        // Generate Ward Buttons dynamically 1 to 15
+        var slider = document.getElementById("wardSlider");
+        for (var w = 1; w <= 15; w++) {
+            var btn = document.createElement("button");
+            btn.className = "ward-btn";
+            btn.setAttribute("data-ward", w);
+            btn.innerText = "वार्ड " + w;
+            slider.appendChild(btn);
+        }
+
+        // Event listeners for wards
+        var wardBtns = document.querySelectorAll(".ward-btn");
+        wardBtns.forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                wardBtns.forEach(function(b) { b.classList.remove("active"); });
+                this.classList.add("active");
+                selectedWard = this.getAttribute("data-ward");
                 updateList();
-            }
+            });
         });
 
         searchBox.addEventListener("input", function() {
@@ -147,90 +113,74 @@
         });
 
         function updateList() {
-    var query = searchBox.value.trim().toLowerCase();
-    var results = [];
+            var query = searchBox.value.trim().toLowerCase();
+            var results = [];
 
-    for (var i = 0; i < rawVoters.length; i++) {
-        var v = rawVoters[i];
-        var rawStr = String(v.raw_item).toUpperCase();
-        var isDeleted = rawStr.indexOf("DELETED") !== -1 || rawStr.indexOf("विलोपित") !== -1;
+            for (var i = 0; i < rawVoters.length; i++) {
+                var v = rawVoters[i];
+                var rawStr = String(v.raw_item).toUpperCase();
+                var isDeleted = rawStr.indexOf("DELETED") !== -1 || rawStr.indexOf("विलोपित") !== -1;
 
-        if (selectedWard === "deleted") {
-            if (!isDeleted) continue;
-        } else {
-            var wardMatch = (selectedWard === "all") || (String(v.ward_no) === String(selectedWard));
-            if (!wardMatch) continue;
+                if (selectedWard === "deleted") {
+                    if (!isDeleted) continue;
+                } else {
+                    var wardMatch = (selectedWard === "all") || (String(v.ward_no) === String(selectedWard));
+                    if (!wardMatch) continue;
+                }
+
+                if (!query) {
+                    results.push(v);
+                    continue;
+                }
+
+                var n = String(v.name).toLowerCase();
+                var r = String(v.relative_name).toLowerCase();
+                var e = String(v.epic_no).toLowerCase();
+                var h = String(v.house_no).toLowerCase();
+                var s = String(v.serial_no).toLowerCase();
+
+                if (n.indexOf(query) !== -1 || r.indexOf(query) !== -1 || e.indexOf(query) !== -1 || h === query || s === query) {
+                    results.push(v);
+                }
+            }
+
+            displayCards(results);
         }
-
-        if (!query) {
-            results.push(v);
-            continue;
-        }
-
-        var n = String(v.name).toLowerCase();
-        var r = String(v.relative_name).toLowerCase();
-        var e = String(v.epic_no).toLowerCase();
-        var h = String(v.house_no).toLowerCase();
-        var s = String(v.serial_no).toLowerCase();
-
-        if (n.indexOf(query) !== -1 || r.indexOf(query) !== -1 || e.indexOf(query) !== -1 || h === query || s === query) {
-            results.push(v);
-        }
-    }
-
-    displayCards(results);
-        }
-        
 
         function displayCards(list) {
-            var container = document.getElementById("cardContainer");
-            var stat = document.getElementById("statText");
-            
-            stat.innerText = "दिख रहे मतदाता: " + list.length;
+            statText.innerText = "दिख रहे मतदाता: " + list.length;
             container.innerHTML = "";
 
             if (list.length === 0) {
-                container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता नहीं मिला</p>";
+                container.innerHTML = "<p style='text-align:center; color:#64748b; margin-top:30px;'>कोई मतदाता नहीं मिला।</p>";
                 return;
             }
 
             var cardsHtml = "";
+            var limit = Math.min(list.length, 100); // Performance optimization for initial load
 
-            for (var i = 0; i < list.length; i++) {
+            for (var i = 0; i < limit; i++) {
                 var item = list[i];
-                var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
-                
-                var isDeleted = JSON.stringify(item.raw_item).includes("DELETED");
-                var deleteBadge = isDeleted ? "<span style='background:#fee2e2; color:#dc2626; padding:2px 6px; border-radius:6px; font-weight:bold; margin-left:8px; font-size:12px;'>DELETED</span>" : "";
+                var rawStr = String(item.raw_item).toUpperCase();
+                var isDeleted = rawStr.indexOf("DELETED") !== -1 || rawStr.indexOf("विलोपित") !== -1;
+                var badgeHtml = isDeleted ? '<span class="tag deleted">डिलिटेड</span>' : '';
 
-                cardsHtml += "<div class='voter-card' " + (isDeleted ? "style='border-left: 4px solid #dc2626; background: #fff5f5;'" : "") + ">" +
-                    "<div class='card-head'>" +
-                        "<span class='voter-name'>" + item.name + deleteBadge + "</span>" +
-                        "<span class='tag'>वार्ड " + item.ward_no + " • क्र. " + item.serial_no + "</span>" +
-                    "</div>" +
-                    "<div class='card-detail'><span class='highlight'>संबंधी का नाम:</span> " + item.relative_name + "</div>" +
-                    "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gText + "</div>" +
-                    "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
-                "</div>";
+                cardsHtml += '<div class="voter-card">' +
+                    '<div class="card-head">' +
+                        '<span class="voter-name">' + item.name + ' ' + badgeHtml + '</span>' +
+                        '<span class="tag">वार्ड ' + item.ward_no + '</span>' +
+                    '</div>' +
+                    '<div class="card-detail">रिश्तेदार: <span class="highlight">' + (item.relative_name || '-') + '</span></div>' +
+                    '<div class="card-detail">EPIC: <span class="highlight">' + (item.epic_no || '-') + '</span> | मकान: <span class="highlight">' + (item.house_no || '-') + '</span></div>' +
+                    '<div class="card-detail">क्रम संख्या: <span class="highlight">' + (item.serial_no || '-') + '</span> | उम्र: <span class="highlight">' + (item.age || '-') + '</span></div>' +
+                '</div>';
             }
-            
+
             container.innerHTML = cardsHtml;
         }
-document.getElementById("cardContainer").innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>Voters load ho rahe hain, kripya intezaar karein...</p>";
-        
+
+        // Initial load
         updateList();
     </script>
 </body>
-<script>
-    function checkPassword() {
-        var pass = document.getElementById("lockInput").value;
-        if (pass === "052026") { // यहाँ "123" की जगह अपना पासवर्ड लिख लें
-            location.reload(); 
-        } else {
-            document.getElementById("lockError").style.display = "block";
-            document.getElementById("lockInput").value = "";
-        }
-    }
-</script>
-            
 </html>
