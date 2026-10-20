@@ -28,6 +28,17 @@
 </head>
 <body>
 
+    <script>
+        // Password Protection Check
+        var correctPassword = "052026";
+        var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
+        
+        if (userEntered !== correctPassword) {
+            document.body.innerHTML = "<h2 style='text-align:center;margin-top:20vh;color:#dc2626;'>Galat Password! Website dekhne ki anumati nahi hai.</h2>";
+            throw new Error("Unauthorized access");
+        }
+    </script>
+
     <div class="header">
         <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
         <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
@@ -67,20 +78,8 @@
 
     <div id="cardContainer"></div>
 
-    <!-- Sabse pehle data.js load hogi -->
     <script src="data.js"></script>
-
     <script>
-        // Password Protection Check
-        var correctPassword = "052026";
-        var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
-        
-        if (userEntered !== correctPassword) {
-            document.body.innerHTML = "<h2 style='text-align:center;margin-top:20vh;color:#dc2626;'>Galat Password! Website dekhne ki anumati nahi hai.</h2>";
-            throw new Error("Unauthorized access");
-        }
-
-        // Data source automatic detection
         var actualData = [];
         if (typeof voterData !== 'undefined') { actualData = voterData; }
         else if (typeof voters !== 'undefined') { actualData = voters; }
@@ -198,7 +197,7 @@
                         "<span class='tag'>वार्ड " + item.ward_no + " • क्र. " + item.serial_no + "</span>" +
                     "</div>" +
                     "<div class='card-detail'><span class='highlight'>संबंधी का नाम:</span> " + item.relative_name + "</div>" +
-                    "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gTest + "</div>" +
+                    "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gText + "</div>" +
                     "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
                 "</div>";
             }
