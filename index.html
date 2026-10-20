@@ -222,8 +222,6 @@
         }
 
      updateList();
-
-        // यहाँ यह गिनती वाला कोड जोड़ दें
         function countSpecificNames() {
             var singhCount = 0, kaurCount = 0, baiCount = 0;
             for (var i = 0; i < rawVoters.length; i++) {
@@ -235,9 +233,20 @@
                 if (fullStr.indexOf("कौर") !== -1 || fullStr.indexOf("kaur") !== -1) kaurCount++;
                 if (fullStr.indexOf("बाई") !== -1 || fullStr.indexOf("bai") !== -1) baiCount++;
             }
-            console.log("सिंह: " + singhCount, "कौर: " + kaurCount, "बाई: " + baiCount);
+            return " | सिंह: " + singhCount + " | कौर: " + kaurCount + " | बाई: " + baiCount;
         }
-        countSpecificNames();
+
+        var originalDisplay = displayCards;
+        displayCards = function(list, totalMatches, query) {
+            originalDisplay(list, totalMatches, query);
+            if (!query && selectedWard === "all") {
+                document.getElementById("statText").innerText += countSpecificNames();
+            }
+        };
+
+        updateList();
+        
+        
     </script>
 </body>
 </html>
