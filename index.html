@@ -221,7 +221,23 @@
             container.innerHTML = cardsHtml;
         }
 
-        updateList();
+     updateList();
+
+        // यहाँ यह गिनती वाला कोड जोड़ दें
+        function countSpecificNames() {
+            var singhCount = 0, kaurCount = 0, baiCount = 0;
+            for (var i = 0; i < rawVoters.length; i++) {
+                var name = String(rawVoters[i].name).toLowerCase();
+                var relative = String(rawVoters[i].relative_name).toLowerCase();
+                var fullStr = name + " " + relative;
+                
+                if (fullStr.indexOf("सिंह") !== -1 || fullStr.indexOf("singh") !== -1) singhCount++;
+                if (fullStr.indexOf("कौर") !== -1 || fullStr.indexOf("kaur") !== -1) kaurCount++;
+                if (fullStr.indexOf("बाई") !== -1 || fullStr.indexOf("bai") !== -1) baiCount++;
+            }
+            console.log("सिंह: " + singhCount, "कौर: " + kaurCount, "बाई: " + baiCount);
+        }
+        countSpecificNames();
     </script>
 </body>
 </html>
