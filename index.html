@@ -222,27 +222,7 @@
         }
 
      updateList();
-        function countSpecificNames() {
-            var singhCount = 0, kaurCount = 0, baiCount = 0;
-            for (var i = 0; i < rawVoters.length; i++) {
-                var name = String(rawVoters[i].name).toLowerCase();
-                var relative = String(rawVoters[i].relative_name).toLowerCase();
-                var fullStr = name + " " + relative;
-                
-                if (fullStr.indexOf("सिंह") !== -1 || fullStr.indexOf("singh") !== -1) singhCount++;
-                if (fullStr.indexOf("कौर") !== -1 || fullStr.indexOf("kaur") !== -1) kaurCount++;
-                if (fullStr.indexOf("बाई") !== -1 || fullStr.indexOf("bai") !== -1) baiCount++;
-            }
-            return " | सिंह: " + singhCount + " | कौर: " + kaurCount + " | बाई: " + baiCount;
-        }
 
-        var originalDisplay = displayCards;
-        displayCards = function(list, totalMatches, query) {
-            originalDisplay(list, totalMatches, query);
-            if (!query && selectedWard === "all") {
-                document.getElementById("statText").innerText += countSpecificNames();
-            }
-        };
 
         updateList();
         
