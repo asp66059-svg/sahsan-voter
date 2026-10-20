@@ -67,11 +67,11 @@
 
     <div id="cardContainer"></div>
 
-    <!-- Pehle data.js load hogi -->
+    <!-- Sabse pehle data.js load hogi -->
     <script src="data.js"></script>
-    
+
     <script>
-        // Password Check
+        // Password Protection Check
         var correctPassword = "052026";
         var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
         
@@ -80,6 +80,7 @@
             throw new Error("Unauthorized access");
         }
 
+        // Data source automatic detection
         var actualData = [];
         if (typeof voterData !== 'undefined') { actualData = voterData; }
         else if (typeof voters !== 'undefined') { actualData = voters; }
@@ -184,5 +185,28 @@
             var cardsHtml = "";
 
             for (var i = 0; i < list.length; i++) {
-                var item = list
+                var item = list[i];
+                var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
                 
+                var rawStr = String(item.raw_item).toUpperCase();
+                var isDeleted = rawStr.indexOf("DELETED") !== -1 || rawStr.indexOf("विलोपित") !== -1;
+                var deleteBadge = isDeleted ? "<span style='background:#fee2e2; color:#dc2626; padding:2px 6px; border-radius:6px; font-weight:bold; margin-left:8px; font-size:12px;'>DELETED</span>" : "";
+
+                cardsHtml += "<div class='voter-card' " + (isDeleted ? "style='border-left: 4px solid #dc2626; background: #fff5f5;'" : "") + ">" +
+                    "<div class='card-head'>" +
+                        "<span class='voter-name'>" + item.name + deleteBadge + "</span>" +
+                        "<span class='tag'>वार्ड " + item.ward_no + " • क्र. " + item.serial_no + "</span>" +
+                    "</div>" +
+                    "<div class='card-detail'><span class='highlight'>संबंधी का नाम:</span> " + item.relative_name + "</div>" +
+                    "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gTest + "</div>" +
+                    "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
+                "</div>";
+            }
+            
+            container.innerHTML = cardsHtml;
+        }
+
+        updateList();
+    </script>
+</body>
+</html>
