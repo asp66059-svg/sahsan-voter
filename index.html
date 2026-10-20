@@ -67,12 +67,17 @@
 
     <div id="cardContainer"></div>
 
-    <!-- data.js file se voters ka data connect hoga -->
     <script src="data.js"></script>
     <script>
+        // Automatic data source detection
+        var actualData = [];
+        if (typeof voterData !== 'undefined') { actualData = voterData; }
+        else if (typeof voters !== 'undefined') { actualData = voters; }
+        else if (typeof data !== 'undefined') { actualData = data; }
+
         var rawVoters = [];
-        if (typeof voterData !== 'undefined' && Array.isArray(voterData)) {
-            rawVoters = voterData.map(function(v) {
+        if (Array.isArray(actualData)) {
+            rawVoters = actualData.map(function(v) {
                 if (Array.isArray(v)) {
                     return {
                         serial_no: v[0],
