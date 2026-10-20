@@ -24,37 +24,18 @@
         .tag.deleted { background: #fee2e2; color: #991b1b; }
         .card-detail { font-size: 13.5px; color: #475569; margin-bottom: 3px; }
         .highlight { color: #0f172a; font-weight: 500; }
-
-        /* Lock Screen Styling */
-        #lockScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1e293b; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
-        #lockBox { background: white; padding: 25px; border-radius: 12px; text-align: center; color: #1f2937; width: 90%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        #lockInput { width: 100%; padding: 10px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 8px; margin: 15px 0; outline: none; text-align: center; }
-        #lockBtn { width: 100%; padding: 10px; background: #1e40af; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        #lockError { color: red; font-size: 13px; margin-top: 8px; display: none; }
     </style>
 </head>
 <body>
 
-    <!-- Password Lock Screen Overlay -->
-    <div id="lockScreen">
-        <div id="lockBox">
-            <h3 style="margin-top:0; color:#1e40af;">ग्राम पंचायत सहसन</h3>
-            <p style="font-size:14px; color:#64748b;">पोर्टल देखने के लिए पासवर्ड दर्ज करें</p>
-            <input type="password" id="lockInput" placeholder="पासवर्ड लिखें...">
-            <button id="lockBtn" onclick="checkPassword()">सत्यापित करें</button>
-            <div id="lockError">गलत पासवर्ड! पुनः प्रयास करें।</div>
-        </div>
-    </div>
-
     <div class="header">
-        <h1>ग्राम पंचायत सहसन</h1>
+        <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
         <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
     </div>
 
     <div class="ward-slider" id="wardSlider">
         <button class="ward-btn active" data-ward="all">सभी वार्ड</button>
         <button class="ward-btn" data-ward="deleted" style="background: #fee2e2; color: #991b1b; border-color: #fca5a5;">डिलिटेड वोटर्स</button>
-        <!-- Wards 1 to 15 will be injected via JS if needed or can be kept -->
     </div>
 
     <div class="search-wrapper">
@@ -72,16 +53,6 @@
     <script src="data.js"></script>
 
     <script>
-        function checkPassword() {
-            var pass = document.getElementById("lockInput").value;
-            if (pass === "123") { // Yahan "123" ki jagah apna password rakh sakte hain
-                document.getElementById("lockScreen").style.display = "none";
-            } else {
-                document.getElementById("lockError").style.display = "block";
-                document.getElementById("lockInput").value = "";
-            }
-        }
-
         var selectedWard = "all";
         var searchBox = document.getElementById("searchBox");
         var container = document.getElementById("cardContainer");
@@ -157,7 +128,7 @@
             }
 
             var cardsHtml = "";
-            var limit = Math.min(list.length, 100); // Performance optimization for initial load
+            var limit = Math.min(list.length, 100);
 
             for (var i = 0; i < limit; i++) {
                 var item = list[i];
