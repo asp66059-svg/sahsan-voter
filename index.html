@@ -28,17 +28,6 @@
 </head>
 <body>
 
-    <script>
-        // Yahan apna password set karein (jaise '1234' ya koi bhi text)
-        var correctPassword = "052026"; 
-        var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
-        
-        if (userEntered !== correctPassword) {
-            document.body.innerHTML = "<h2 style='text-align:center;margin-top:20vh;color:#dc2626;'>Galat Password! Website dekhne ki anumati nahi hai.</h2>";
-            throw new Error("Unauthorized access");
-        }
-    </script>
-
     <div class="header">
         <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
         <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
@@ -73,13 +62,24 @@
     </div>
 
     <div class="meta-bar">
-        <span id="statText">कुल मतदाता: 5886</span>
+        <span id="statText">कुल मतदाता: 0</span>
     </div>
 
     <div id="cardContainer"></div>
 
+    <!-- Pehle data.js load hogi -->
     <script src="data.js"></script>
+    
     <script>
+        // Password Check
+        var correctPassword = "052026";
+        var userEntered = prompt("Kripya portal kholne ke liye password darj karein:");
+        
+        if (userEntered !== correctPassword) {
+            document.body.innerHTML = "<h2 style='text-align:center;margin-top:20vh;color:#dc2626;'>Galat Password! Website dekhne ki anumati nahi hai.</h2>";
+            throw new Error("Unauthorized access");
+        }
+
         var actualData = [];
         if (typeof voterData !== 'undefined') { actualData = voterData; }
         else if (typeof voters !== 'undefined') { actualData = voters; }
@@ -184,10 +184,5 @@
             var cardsHtml = "";
 
             for (var i = 0; i < list.length; i++) {
-                var item = list[i];
-                var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
+                var item = list
                 
-                var rawStr = String(item.raw_item).toUpperCase();
-                var isDeleted = rawStr.indexOf("DELETED") !== -1 || rawStr.indexOf("विलोपित") !== -1;
-                var deleteBadge = isDeleted ? "<span style='background:#fee2e2; color:#dc2626; padding:2px
-                    
