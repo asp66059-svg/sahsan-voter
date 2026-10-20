@@ -69,7 +69,6 @@
 
     <script src="data.js"></script>
     <script>
-        // Automatic data source detection
         var actualData = [];
         if (typeof voterData !== 'undefined') { actualData = voterData; }
         else if (typeof voters !== 'undefined') { actualData = voters; }
@@ -97,6 +96,7 @@
         var selectedWard = "all";
         var slider = document.getElementById("wardSlider");
         var searchBox = document.getElementById("voterSearch");
+        var searchTimeout = null;
 
         slider.addEventListener("click", function(e) {
             if (e.target.classList.contains("ward-btn")) {
@@ -111,12 +111,16 @@
         });
 
         searchBox.addEventListener("input", function() {
-            updateList();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function() {
+                updateList();
+            }, 300);
         });
 
         function updateList() {
             var query = searchBox.value.trim().toLowerCase();
             var results = [];
+            var matchCount = 0;
 
             for (var i = 0; i < rawVoters.length; i++) {
                 var v = rawVoters[i];
@@ -130,30 +134,41 @@
                     if (!wardMatch) continue;
                 }
 
-                if (!query) {
-                    results.push(v);
-                    continue;
+                if (query) {
+                    var n = String(v.name).toLowerCase();
+                    var r = String(v.relative_name).toLowerCase();
+                    var e = String(v.epic_no).toLowerCase();
+                    var h = String(v.house_no).toLowerCase();
+                    var s = String(v.serial_no).toLowerCase();
+
+                    if (n.indexOf(query) === -1 && r.indexOf(query) === -1 && e.indexOf(query) === -1 && h !== query && s !== query) {
+                        continue;
+                    }
                 }
 
-                var n = String(v.name).toLowerCase();
-                var r = String(v.relative_name).toLowerCase();
-                var e = String(v.epic_no).toLowerCase();
-                var h = String(v.house_no).toLowerCase();
-                var s = String(v.serial_no).toLowerCase();
+                results.push(v);
+                matchCount++;
 
-                if (n.indexOf(query) !== -1 || r.indexOf(query) !== -1 || e.indexOf(query) !== -1 || h === query || s === query) {
-                    results.push(v);
+                if (!query && matchCount >= 100 && selectedWard === "all") {
+                    break; 
                 }
             }
 
-            displayCards(results);
+            displayCards(results, matchCount, query);
         }
 
-        function displayCards(list) {
+        function displayCards(list, totalMatches, query) {
             var container = document.getElementById("cardContainer");
             var stat = document.getElementById("statText");
             
-            stat.innerText = "दिख रहे मतदाता: " + list.length;
+            if (query) {
+                stat.innerText = "कुल मिले परिणाम: " + totalMatches;
+            } else if (selectedWard === "all") {
+                stat.innerText = "कुल मतदाता (दिख रहे 100): " + rawVoters.length;
+            } else {
+                stat.innerText = "दिख रहे मतदाता: " + list.length;
+            }
+
             container.innerHTML = "";
 
             if (list.length === 0) {
@@ -162,8 +177,9 @@
             }
 
             var cardsHtml = "";
+            var renderLimit = Math.min(list.length, 100);
 
-            for (var i = 0; i < list.length; i++) {
+            for (var i = 0; i < renderLimit; i++) {
                 var item = list[i];
                 var gText = item.gender === "M" ? "पुरुष" : (item.gender === "F" ? "स्त्री" : item.gender);
                 
@@ -182,6 +198,10 @@
                 "</div>";
             }
             
+            if (list.length > 100) {
+                cardsHtml += "<p style='text-align:center;color:#64748b;padding:10px;'>...और भी परिणाम हैं, कृपया सही नाम या वार्ड चुनकर खोजें...</p>";
+            }
+
             container.innerHTML = cardsHtml;
         }
 
