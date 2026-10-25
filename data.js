@@ -1,4 +1,4 @@
-const voterData = [
+con st voterData = [
 [1, 1, "RJ/09/068144137/", "लल्लु (Lallu)", "रहमत (Rahmat)", "1", 86, "M", ""],
 [2, 1, "LTW1211838", "अफजल (Afjal)", "लल्लु (Lallu)", "1", 60, "M", ""],
 [3, 1, "RJ/09/068/144436", "शहीनमोहम्मद (Shaheen Mohammad)", "लल्लु (Lallu)", "1", 48, "M", ""],
