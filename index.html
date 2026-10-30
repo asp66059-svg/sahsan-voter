@@ -21,7 +21,7 @@
         #portalContent { display: none; }
         .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
         .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
-        .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.92; }
+        .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.92; display: flex; justify-content: space-between; align-items: center; }
         .ward-slider { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; scrollbar-width: none; }
         .ward-slider::-webkit-scrollbar { display: none; }
         .ward-btn { flex-shrink: 0; padding: 7px 15px; font-size: 13px; font-weight: 600; border: 1px solid #cbd5e1; background: white; border-radius: 8px; cursor: pointer; color: #475569; }
@@ -36,7 +36,7 @@
         .tag { font-size: 11px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
         .card-detail { font-size: 13.5px; margin: 3px 0; color: #334155; line-height: 1.4; }
         .highlight { color: #0f172a; font-weight: 600; }
-        .logout-btn { float: right; background: #fee2e2; color: #dc2626; border: none; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .logout-btn { background: #fee2e2; color: #dc2626; border: none; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -54,10 +54,11 @@
     <!-- Main Portal Content -->
     <div id="portalContent">
         <div class="header">
-            <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह 
-                <button class="logout-btn" onclick="logout()">Logout</button>
-            </h1>
-            <p>मतदाता खोज व वोटर पर्ची पोर्टल 2026</p>
+            <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
+            <p>
+                <span>मतदाता खोज व वोटर पर्ची पोर्टल 2026</span>
+                <span>User: <strong id="loggedInUserDisplay"></strong> <button class="logout-btn" onclick="logout()">Logout</button></span>
+            </p>
         </div>
 
         <div class="ward-slider" id="wardSlider">
@@ -97,7 +98,6 @@
 
     <script src="data.js"></script>
     <script>
-        // Aapke diye gaye names/passwords aur generic IDs
         var validAdmins = {
             "navneet": "051126",
             "aatma": "090319",
@@ -128,7 +128,7 @@
         };
 
         if (sessionStorage.getItem("isLoggedIn") === "true") {
-            showPortal();
+            showPortal(sessionStorage.getItem("activeUser"));
         }
 
         function checkLogin() {
@@ -137,7 +137,8 @@
             
             if (validAdmins[u] && String(validAdmins[u]) === String(p)) {
                 sessionStorage.setItem("isLoggedIn", "true");
-                showPortal();
+                sessionStorage.setItem("activeUser", u);
+                showPortal(u);
             } else {
                 document.getElementById("errorMsg").style.display = "block";
             }
@@ -145,12 +146,16 @@
 
         function logout() {
             sessionStorage.removeItem("isLoggedIn");
+            sessionStorage.removeItem("activeUser");
             location.reload();
         }
 
-        function showPortal() {
+        function showPortal(username) {
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("portalContent").style.display = "block";
+            if(username) {
+                document.getElementById("loggedInUserDisplay").innerText = username;
+            }
             initPortal();
         }
 
