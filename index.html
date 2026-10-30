@@ -45,7 +45,7 @@
     <div id="loginScreen">
         <h2>Admin Login</h2>
         <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Gram Panchayat Sahsan Portal 2026</p>
-        <input type="text" id="adminUser" class="login-input" placeholder="Apni Admin ID darj karein">
+        <input type="text" id="adminUser" class="login-input" placeholder="Admin ID darj karein">
         <input type="password" id="adminPass" class="login-input" placeholder="Password darj karein">
         <button class="login-btn" onclick="checkLogin()">Login Karein</button>
         <div id="errorMsg">Galat ID ya Password! Kripya sahi jankari dein.</div>
@@ -97,13 +97,34 @@
 
     <script src="data.js"></script>
     <script>
-        // Yahan aap jitni chahein utni alag-alag IDs aur passwords bana sakte hain:
+        // Aapke diye gaye names/passwords aur generic IDs
         var validAdmins = {
-            "navneet": "052026",
-            "sonu": "sonu123",
-            "Aatma": "090319",
-            "sahsan": "123123",
-            "Ajju": "1710"
+            "navneet": "051126",
+            "aatma": "090319",
+            "sonu": "123123",
+            "sagar": "123123",
+            "vikram": "051126",
+            "ajju": "1710",
+            "user1": "pass101",
+            "user2": "pass102",
+            "user3": "pass103",
+            "user4": "pass104",
+            "user5": "pass105",
+            "user6": "pass106",
+            "user7": "pass107",
+            "user8": "pass108",
+            "user9": "pass109",
+            "user10": "pass110",
+            "user11": "pass111",
+            "user12": "pass112",
+            "user13": "pass113",
+            "user14": "pass114",
+            "user15": "pass115",
+            "user16": "pass116",
+            "user17": "pass117",
+            "user18": "pass118",
+            "user19": "pass119",
+            "user20": "pass120"
         };
 
         if (sessionStorage.getItem("isLoggedIn") === "true") {
@@ -114,7 +135,7 @@
             var u = document.getElementById("adminUser").value.trim().toLowerCase();
             var p = document.getElementById("adminPass").value.trim();
             
-            if (validAdmins[u] && validAdmins[u] === p) {
+            if (validAdmins[u] && String(validAdmins[u]) === String(p)) {
                 sessionStorage.setItem("isLoggedIn", "true");
                 showPortal();
             } else {
