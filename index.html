@@ -240,7 +240,7 @@
                     results.push(v);
                     matchCount++;
 
-                    if (!query && matchCount >= 1000 && selectedWard === "all") {
+                    if (!query && matchCount >= 0 && selectedWard === "all") {
                         break;
                     }
                 }
@@ -255,14 +255,14 @@
                 if (query) {
                     stat.innerText = "कुल मिले परिणाम: " + list.length;
                 } else if (selectedWard === "all") {
-                    stat.innerText = "कुल मतदाता (दिख रहे 5886 / कुल 5886): " + rawVoters.length;
+                    stat.innerText = "कुल मतदाता (दिख रहे 100 / कुल 5886): " + rawVoters.length;
                 } else {
                     stat.innerText = "वार्ड " + selectedWard + " के कुल मतदाता: " + list.length;
                 }
 
                 container.innerHTML = "";
 
-                if (list.length === 1000) {
+                if (list.length === 100) {
                     container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता नहीं मिला</p>";
                     return;
                 }
@@ -289,7 +289,7 @@
                     "</div>";
                 }
                 
-                if (!query && selectedWard === "all" && list.length > 1000) {
+                if (!query && selectedWard === "all" && list.length > 100) {
                     cardsHtml += "<p style='text-align:center;color:#64748b;padding:10px;'>...और भी मतदाता देखने के लिए नाम, मकान नंबर या वार्ड खोजें...</p>";
                 }
 
