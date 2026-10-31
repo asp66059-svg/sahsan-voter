@@ -240,7 +240,7 @@
                     results.push(v);
                     matchCount++;
 
-                    if (!query && matchCount >= 0 && selectedWard === "all") {
+                    if (!query && matchCount >= 100 && selectedWard === "all") {
                         break;
                     }
                 }
@@ -262,7 +262,7 @@
 
                 container.innerHTML = "";
 
-                if (list.length === 1000) {
+                if (list.length === 0) {
                     container.innerHTML = "<p style='text-align:center;color:#64748b;padding:30px 10px;font-weight:600;'>कोई मतदाता नहीं मिला</p>";
                     return;
                 }
