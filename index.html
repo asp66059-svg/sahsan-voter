@@ -8,7 +8,10 @@
         * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
         body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
         
-        /* Login Box Styles */
+        #invalidScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 85vh; text-align: center; }
+        #invalidScreen h1 { color: #dc2626; font-size: 28px; margin-bottom: 8px; }
+        #invalidScreen p { color: #64748b; font-size: 15px; }
+
         #loginScreen { max-width: 400px; margin: 15vh auto; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
         #loginScreen h2 { margin-top: 0; color: #1e40af; font-size: 22px; }
         .login-input { width: 100%; padding: 12px; margin: 10px 0; font-size: 15px; border: 2px solid #cbd5e1; border-radius: 8px; outline: none; }
@@ -17,7 +20,6 @@
         .login-btn:hover { background: #1d4ed8; }
         #errorMsg { color: #dc2626; font-size: 13px; margin-top: 8px; display: none; }
 
-        /* Portal Styles */
         #portalContent { display: none; }
         .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 14px 12px; border-radius: 12px; text-align: center; margin-bottom: 12px; }
         .header h1 { margin: 0; font-size: 19px; font-weight: 700; }
@@ -41,8 +43,12 @@
 </head>
 <body>
 
-    <!-- Login Screen -->
-    <div id="loginScreen">
+    <div id="invalidScreen">
+        <h1>Invalid Link</h1>
+        <p>Yeh link aamanya ya expired ho chuka hai.</p>
+    </div>
+
+    <div id="loginScreen" style="display: none;">
         <h2>Admin Login</h2>
         <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Gram Panchayat Sahsan Portal 2026</p>
         <input type="text" id="adminUser" class="login-input" placeholder="Admin ID darj karein">
@@ -51,7 +57,6 @@
         <div id="errorMsg">Galat ID ya Password! Kripya sahi jankari dein.</div>
     </div>
 
-    <!-- Main Portal Content -->
     <div id="portalContent">
         <div class="header">
             <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
@@ -100,12 +105,12 @@
     <script>
         var validAdmins = {
             "navneet": "051126",
-            "aa tma": "090319",
-            "son u": "123123",
-            "sag ar": "123123",
-            "v ikram": "051126",
-            "ajju": "171006",
-            "us er1": "pass101",
+            "aatma": "090319",
+            "sonu": "123123",
+            "sagar": "123123",
+            "vikram": "051126",
+            "ajju": "1710",
+            "user1": "pass101",
             "user2": "pass102",
             "user3": "pass103",
             "user4": "pass104",
@@ -127,8 +132,13 @@
             "user20": "pass120"
         };
 
+        var urlParams = new URLSearchParams(window.location.search);
+        
         if (sessionStorage.getItem("isLoggedIn") === "true") {
             showPortal(sessionStorage.getItem("activeUser"));
+        } else if (urlParams.get('access') === 'sahsan2026') {
+            document.getElementById("invalidScreen").style.display = "none";
+            document.getElementById("loginScreen").style.display = "block";
         }
 
         function checkLogin() {
@@ -147,10 +157,11 @@
         function logout() {
             sessionStorage.removeItem("isLoggedIn");
             sessionStorage.removeItem("activeUser");
-            location.reload();
+            window.location.href = window.location.pathname;
         }
 
         function showPortal(username) {
+            document.getElementById("invalidScreen").style.display = "none";
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("portalContent").style.display = "block";
             if(username) {
@@ -239,10 +250,6 @@
 
                     results.push(v);
                     matchCount++;
-
-                    if (!query && matchCount >= 100 && selectedWard === "all") {
-                        break;
-                    }
                 }
 
                 displayCards(results, matchCount, query);
@@ -255,7 +262,7 @@
                 if (query) {
                     stat.innerText = "कुल मिले परिणाम: " + list.length;
                 } else if (selectedWard === "all") {
-                    stat.innerText = "कुल मतदाता (दिख रहे 100 / कुल 5886): " + rawVoters.length;
+                    stat.innerText = "कुल मतदाता (कुल 5886): " + rawVoters.length;
                 } else {
                     stat.innerText = "वार्ड " + selectedWard + " के कुल मतदाता: " + list.length;
                 }
@@ -268,7 +275,7 @@
                 }
 
                 var cardsHtml = "";
-                var renderLimit = query ? list.length : Math.min(list.length, 1000);
+                var renderLimit = list.length;
 
                 for (var i = 0; i < renderLimit; i++) {
                     var item = list[i];
@@ -287,10 +294,6 @@
                         "<div class='card-detail'><span class='highlight'>मकान नं:</span> " + item.house_no + " | <span class='highlight'>उम्र:</span> " + item.age + " वर्ष | <span class='highlight'>लिंग:</span> " + gText + "</div>" +
                         "<div class='card-detail'><span class='highlight'>EPIC पहचान पत्र:</span> " + (item.epic_no || "उपलब्ध नहीं") + "</div>" +
                     "</div>";
-                }
-                
-                if (!query && selectedWard === "all" && list.length > 100) {
-                    cardsHtml += "<p style='text-align:center;color:#64748b;padding:10px;'>...और भी मतदाता देखने के लिए नाम, मकान नंबर या वार्ड खोजें...</p>";
                 }
 
                 container.innerHTML = cardsHtml;
