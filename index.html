@@ -138,9 +138,13 @@
 
         var urlParams = new URLSearchParams(window.location.search);
         
+        if (urlParams.get('access') === 'sahsan2026') {
+            sessionStorage.setItem("hasValidAccess", "true");
+        }
+
         if (sessionStorage.getItem("isLoggedIn") === "true") {
             showPortal(sessionStorage.getItem("activeUser"));
-        } else if (urlParams.get('access') === 'sahsan2026') {
+        } else if (sessionStorage.getItem("hasValidAccess") === "true") {
             document.getElementById("invalidScreen").style.display = "none";
             document.getElementById("loginScreen").style.display = "block";
         }
@@ -161,6 +165,7 @@
         function logout() {
             sessionStorage.removeItem("isLoggedIn");
             sessionStorage.removeItem("activeUser");
+            sessionStorage.removeItem("hasValidAccess");
             window.location.href = window.location.pathname;
         }
 
