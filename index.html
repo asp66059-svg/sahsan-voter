@@ -7,10 +7,6 @@
     <style>
         * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; padding: 10px; background: #eef2f6; color: #1f2937; }
-        
-        #invalidScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 85vh; text-align: center; }
-        #invalidScreen h1 { color: #dc2626; font-size: 28px; margin-bottom: 8px; }
-        #invalidScreen p { color: #64748b; font-size: 15px; }
 
         #loginScreen { max-width: 400px; margin: 15vh auto; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
         #loginScreen h2 { margin-top: 0; color: #1e40af; font-size: 22px; }
@@ -47,12 +43,8 @@
 </head>
 <body>
 
-    <div id="invalidScreen">
-        <h1>Invalid Link</h1>
-        <p>Yeh link aamanya ya expired ho chuka hai.</p>
-    </div>
-
-    <div id="loginScreen" style="display: none;">
+    <!-- Login Screen (Direct) -->
+    <div id="loginScreen">
         <h2>Admin Login</h2>
         <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Gram Panchayat Sahsan Portal 2026</p>
         <input type="text" id="adminUser" class="login-input" placeholder="Admin ID darj karein">
@@ -61,9 +53,10 @@
         <div id="errorMsg">Galat ID ya Password! Kripya sahi jankari dein.</div>
     </div>
 
+    <!-- Main Portal Content -->
     <div id="portalContent">
         <div class="header">
-            <h1>ग्राम पंचायत करेंडा- भाई वसीम अहमद</h1>
+            <h1>ग्राम पंचायत सहसन - भाई नवनीत सिंह</h1>
             <p>
                 <span>मतदाता खोज व पर्ची पोर्टल</span>
                 <span>User: <strong id="loggedInUserDisplay"></strong> <button class="logout-btn" onclick="logout()">Logout</button></span>
@@ -136,16 +129,9 @@
             "user20": "pass120"
         };
 
-        var urlParams = new URLSearchParams(window.location.search);
-        
-        if (urlParams.get('access') === 'sahsan2026') {
-            sessionStorage.setItem("hasValidAccess", "true");
-        }
-
         if (sessionStorage.getItem("isLoggedIn") === "true") {
             showPortal(sessionStorage.getItem("activeUser"));
-        } else if (sessionStorage.getItem("hasValidAccess") === "true") {
-            document.getElementById("invalidScreen").style.display = "none";
+        } else {
             document.getElementById("loginScreen").style.display = "block";
         }
 
@@ -165,12 +151,10 @@
         function logout() {
             sessionStorage.removeItem("isLoggedIn");
             sessionStorage.removeItem("activeUser");
-            sessionStorage.removeItem("hasValidAccess");
-            window.location.href = window.location.pathname;
+            location.reload();
         }
 
         function showPortal(username) {
-            document.getElementById("invalidScreen").style.display = "none";
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("portalContent").style.display = "block";
             if(username) {
@@ -288,7 +272,7 @@
                 }
 
                 var cardsHtml = "";
-                var renderLimit = query ? list.length : Math.min(list.length, 1000);
+                var renderLimit = query ? list.length : Math.min(list.length, 100);
 
                 for (var i = 0; i < renderLimit; i++) {
                     var item = list[i];
